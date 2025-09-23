@@ -1,0 +1,149 @@
+%runfile C:/Users/kevin/src/matching/matching.py --args girls2.csv --wdir
+Successfully loaded file: girls2.csv
+Multiple minima: min_value==0.0054, min_indices==(array([16, 18, 18, 18, 18]), array([43, 59, 60, 61, 62]))
+Multiple minima: min_value==0.0054, min_indices==(array([18, 18, 18, 18]), array([59, 60, 61, 62]))
+Multiple minima: min_value==0.0134, min_indices==(array([17, 17, 17, 17]), array([49, 50, 51, 52]))
+Multiple minima: min_value==0.0169, min_indices==(array([20, 20, 20]), array([81, 82, 83]))
+Multiple minima: min_value==0.0341, min_indices==(array([19, 19]), array([68, 69]))
+Multiple minima: min_value==0.0370, min_indices==(array([12, 12, 12, 12]), array([18, 19, 20, 21]))
+Multiple minima: min_value==0.1082, min_indices==(array([6, 6, 6]), array([1, 2, 3]))
+Multiple minima: min_value==0.1191, min_indices==(array([5, 5]), array([2, 3]))
+Match array: [11.  8.  7.  3.  0.  2.  1.  4.  5.  6.  9. 10. 18. 25. 34. 35. 43. 49.
+ 59. 68. 81. 88.]
+NT715, R, 5.2 | 7.3, R, CTS235
+NT729, R, 5.4 | 6.7, R, WUG021
+NT825, L, 5.6 | 6.4, R, WUE044
+NT819, R, 5.6 | 6.0, R, WUE002
+NT897, L, 5.8 | 5.8, R, NT802
+NT801, R, 5.9 | 6.0, L, WUG119
+NT833, R, 5.9 | 6.0, L, WUG100
+NT735, R, 6.1 | 6.1, L, NT895
+NT846, R, 6.2 | 6.2, R, NT845
+NT820, R, 6.2 | 6.2, R, WUG081
+NT901, R, 6.9 | 7.0, R, WUG115
+WUNIC1034, R, 7.1 | 7.2, R, WUG025
+NT924, L, 7.9 | 7.9, A, WUF089
+NT726, R, 8.2 | 8.2, L, WUG006
+NT864, R, 8.9 | 9.0, R, WUTR115
+NT886, R, 9.1 | 9.1, R, WUTR439
+NT934, R, 9.4 | 9.4, R, NT945
+NT842, R, 9.5 | 9.5, R, WUG012
+NT933, R, 9.9 | 9.9, R, WUE054
+MSCPI18, R, 10.2 | 10.2, R, CTS230
+NT808, R, 10.7 | 10.7, L, WUG092
+NT942, R, 10.9 | 10.9, R, WUF020
+
+Average Residual Difference: 0.2239
+Average Absolute Residual Difference: 0.2447
+Maximum Absolute Residual Difference: 2.1008
+Pairs with difference > 1.0: 2
+Pairs with difference > 2.0: 1
+Number with Different Handedness: 8
+Paths = product of number of elements in each tie: 11520
+
+===================================================================
+
+%runfile C:/Users/kevin/src/matching/matching.py --args boys2.csv --wdir
+Successfully loaded file: boys2.csv
+Multiple minima: min_value==0.0027, min_indices==(array([32, 32, 33, 33]), array([28, 29, 28, 29]))
+Multiple minima: min_value==0.0040, min_indices==(array([31, 52, 52, 52]), array([27, 82, 83, 84]))
+Multiple minima: min_value==0.0041, min_indices==(array([52, 52, 52]), array([82, 83, 84]))
+Multiple minima: min_value==0.0057, min_indices==(array([26, 26]), array([21, 22]))
+Multiple minima: min_value==0.0061, min_indices==(array([49, 49]), array([54, 55]))
+Multiple minima: min_value==0.0063, min_indices==(array([20, 20, 50, 50, 50, 50]), array([11, 12, 57, 58, 59, 60]))
+Multiple minima: min_value==0.0063, min_indices==(array([50, 50, 50, 50]), array([57, 58, 59, 60]))
+Multiple minima: min_value==0.0128, min_indices==(array([45, 45, 45]), array([43, 44, 45]))
+Multiple minima: min_value==0.0162, min_indices==(array([55, 55, 55, 55, 55]), array([94, 95, 96, 97, 98]))
+Multiple minima: min_value==0.0179, min_indices==(array([35, 35]), array([30, 31]))
+Multiple minima: min_value==0.0217, min_indices==(array([56, 56, 56, 56]), array([95, 96, 97, 98]))
+Multiple minima: min_value==0.0255, min_indices==(array([59, 59]), array([110, 111]))
+Multiple minima: min_value==0.0279, min_indices==(array([47, 47, 47]), array([47, 48, 49]))
+Multiple minima: min_value==0.0301, min_indices==(array([ 9, 19]), array([5, 9]))
+Multiple minima: min_value==0.0320, min_indices==(array([44, 44]), array([44, 45]))
+Multiple minima: min_value==0.0341, min_indices==(array([54, 54, 54]), array([91, 92, 93]))
+Multiple minima: min_value==0.0344, min_indices==(array([37, 37, 37]), array([34, 35, 36]))
+Multiple minima: min_value==0.0355, min_indices==(array([10, 53, 53, 53, 53, 53]), array([ 6, 86, 87, 88, 89, 90]))
+Multiple minima: min_value==0.0355, min_indices==(array([53, 53, 53, 53, 53]), array([86, 87, 88, 89, 90]))
+Multiple minima: min_value==0.0417, min_indices==(array([22, 22]), array([13, 14]))
+Multiple minima: min_value==0.0448, min_indices==(array([57, 57, 57]), array([104, 105, 106]))
+Multiple minima: min_value==0.0481, min_indices==(array([27, 27]), array([24, 25]))
+Multiple minima: min_value==0.0498, min_indices==(array([58, 58]), array([107, 108]))
+Multiple minima: min_value==0.0779, min_indices==(array([51, 51, 51]), array([76, 77, 78]))
+Multiple minima: min_value==0.0915, min_indices==(array([39, 39]), array([35, 36]))
+Multiple minima: min_value==0.0975, min_indices==(array([41, 41, 41]), array([39, 40, 41]))
+Multiple minima: min_value==3.4432, min_indices==(array([1, 1]), array([40, 41]))
+Match array: [ 41.  40.  36.   0.   3.   2.   4.   1.  33.   5.   6.  22.  18.  17.
+  16.  14.  10.   8.   7.   9.  11.  12.  13.  15.  19.  20.  21.  24.
+  25.  23.  26.  27.  28.  29.  31.  30.  32.  34.  37.  35.  38.  39.
+  42.  45.  44.  43.  46.  47.  50.  54.  57.  76.  82.  86.  91.  94.
+  95. 104. 107. 110. 115.]
+NT908, R, 5.0 | 8.5, R, WUG048
+NT931, R, 5.1 | 8.5, R, WUF042
+CTS135, R, 5.1 | 8.3, R, WUTR125
+NT914, L, 5.2 | 5.2, R, WUG027
+NT816, R, 5.7 | 5.7, R, NT948
+NT900, R, 5.8 | 5.6, L, WUG106
+NT732, R, 5.8 | 5.8, R, CTS209
+NT921, R, 5.8 | 5.5, R, WUG117
+CTS112, R, 5.9 | 8.2, R, NT946
+NT841, R, 6.0 | 6.1, R, NT853
+NT862, R, 6.1 | 6.1, R, MSCPI06
+NT870, R, 6.2 | 7.6, R, WUG020
+NT848, R, 6.3 | 7.1, R, WUF026
+NT818, R, 6.3 | 7.1, R, NT847
+NT874, R, 6.4 | 7.0, R, WUE045
+NT832, R, 6.4 | 6.9, R, WUG056
+NT812, R, 6.4 | 6.8, R, NT892
+NT724, R, 6.4 | 6.6, R, WUE012
+WUNIC1032, R, 6.5 | 6.6, R, NT856
+NT849, R, 6.6 | 6.7, R, NT858
+WUNIC1035, R, 6.8 | 6.8, R, CTS208
+WUNIC1031, R, 6.8 | 6.8, R, WUG019
+NT882, R, 6.9 | 6.9, R, WUG030
+NT809, L, 7.0 | 7.0, R, NT855
+NT817, L, 7.3 | 7.1, A, NT926
+NT922, L, 7.3 | 7.4, R, WUF078
+NT899, R, 7.6 | 7.6, R, WUE041
+NT928, R, 7.7 | 7.7, R, CTS228
+NT834, R, 7.8 | 7.7, R, WUF095
+NT918, A, 7.8 | 7.6, R, NT859
+CTS104, R, 7.8 | 7.8, R, WUF033
+NT851, R, 7.9 | 7.9, R, WUF101
+NT704, R, 8.0 | 8.0, R, WUG063
+NT736, R, 8.0 | 8.0, R, WUTR123
+NT885, R, 8.1 | 8.1, R, WUF019
+NT860, R, 8.1 | 8.1, R, WUE011
+NT876, A, 8.2 | 8.2, R, WUTR221
+NT907, R, 8.3 | 8.3, R, WUG069
+NT814, R, 8.4 | 8.3, R, NT898
+NT829, R, 8.4 | 8.3, R, WUTR120
+NT917, R, 8.4 | 8.4, R, WUG015
+NT941, L, 8.4 | 8.5, R, CTS226
+NT821, R, 8.6 | 8.6, R, WUG054
+NT720, R, 8.6 | 8.7, R, WUF049
+WUNIC1021, R, 8.7 | 8.7, R, WUE004
+NT807, R, 8.7 | 8.7, R, CTS201
+NT852, R, 8.8 | 8.7, R, NT951
+NT894, L, 8.8 | 8.8, L, WUG032
+NT919, R, 8.9 | 8.9, R, NT893
+NT906, R, 9.1 | 9.1, L, WUG046
+NT868, R, 9.2 | 9.2, R, MSCPI05
+NT823, L, 9.7 | 9.8, A, WUF044
+NT903, R, 10.0 | 10.0, R, WUF004
+NT738, L, 10.1 | 10.1, R, MSCPI10
+NT811, R, 10.2 | 10.2, R, WUE037
+NT815, R, 10.3 | 10.3, R, WUG091
+NT939, R, 10.3 | 10.3, R, WUTR275
+NT836, R, 10.6 | 10.6, R, CTS238
+NT813, R, 10.7 | 10.7, R, WUTR127
+NT728, R, 10.8 | 10.8, R, WUF109
+NT883, R, 11.0 | 11.0, R, NT950
+
+Average Residual Difference: 0.2677
+Average Absolute Residual Difference: 0.3160
+Maximum Absolute Residual Difference: 3.4788
+Pairs with difference > 1.0: 5
+Pairs with difference > 2.0: 4
+Number with Different Handedness: 11
+Paths = product of number of elements in each tie: 3095868211200
+

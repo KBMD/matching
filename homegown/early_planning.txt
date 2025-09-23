@@ -1,0 +1,29 @@
+New approach please. Please provide Python code to do the following.
+Pseudocode follows.
+If ncase is the number of participants in the PTD group and nctrl is the number of participants in the "none" group, create a ncase x nctrl difference matrix diff_age defined as follows:
+   diff_age[i,j] = (age of subject ctrl[j] minus age of case[i])
+Make a copy of this matrix called working
+# Note all distances will have to use abs(diff_age)
+
+# SIMPLE WAY
+Initialize variables including 
+	# used_rows (1 x ncase array) = 0, 
+	match (1 x ncase array) = #na
+For k = 0 through ncase-1,
+1. pick i,j that corresponds to the smallest |diff_age[i,j]| in the rows of the matrix not already used (numpy.nanmin). If more than one (i,j) has the same smallest value, save a list of (i,j)s in matches[k]. np.argwhere(np.abs(working[i,j] = np.nanmin(working)))
+1'. do something to explore all possible routes through equals and save final matches list for each route, to compare later based on whatever metric to minimize. Wait. In this particular data set, this will not come up due to blah blah rounding for display see data blah.
+2. save j in match[i]
+3. Set all entries in row i of working to #na.
+Report Average Residual Difference, Maximum Absolute Residual Difference, Average Residual Difference, number with different handedness, with their corresponding __________
+
+
+# PERMUTATIONS
+# If needed, we can ignore any matrix entries where diff_age[i,j] > max_age_diff, with max_age_diff = 2 initially
+all permutations [there are permute(nctrl, ncase) of them] of choosing one column from each row, but a different column for each row
+	i.e. all permutations of the {0, 1, 2, ... ncase-1}
+For each permutation k, ... wait, there are > 10^117 of these.
+
+# What if I take the best 10 columns for each row?
+# Then there are < permute(ncase,10) possible, where the < is because we ignore any columns already chosen
+# Use m=10 for now. Will have to increase m if m gives no possible matches.
+

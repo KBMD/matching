@@ -1,0 +1,11 @@
+https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-021-01256-3
+	Conclusions
+We created an optimal and computationally efficient algorithm to derive a matched case-control sample with and without replacement of controls. The code and the functions are publicly available as an open source in an R package.
+
+https://github.com/benmiroglio/pymatch?tab=readme-ov-file
+	warning: Below we match one record from the majority group to each record in the minority group. This is done with replacement, meaning a single majority record can be matched to multiple minority records.
+
+Lots of good explanatory information:
+https://cran.r-project.org/web/packages/MatchIt/vignettes/MatchIt.html
+https://kosukeimai.github.io/MatchIt/articles/MatchIt.html#matching
+https://kosukeimai.github.io/MatchIt/articles/matching-methods.html

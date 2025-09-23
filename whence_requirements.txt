@@ -1,0 +1,14 @@
+pip freeze > positron_requirements.txt
+# NOTE: .\positron_env.yaml lists lots more dependencies (like scikit-learn, seaborn, sympy, jupyterlab, ...)
+uv add -r .\pip_requirements.txt
+uv lock
+uv sync
+
+
+
+The positron setup instructions says:
+1. Download the environment file positron_env.yaml and put it in the current folder.
+2. Run the following command:
+	mamba env create --file=positron_env.yaml
+3. Activate the environment:
+	conda activate positron

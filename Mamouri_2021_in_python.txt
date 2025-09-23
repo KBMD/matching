@@ -1,0 +1,153 @@
+
+
+
+
+import pandas as pd
+
+def iterations_per_round(dataset, cluster_var, Id_Patient, total_cont_per_case, case_control, mat_per_case=None):
+    # Group by cluster_var and keep only the first two rows per group
+    one_to_one = dataset.groupby(cluster_var).head(2)
+
+    # Find duplicated patients based on their Id_Patient
+    dup_con = one_to_one.drop_duplicates().groupby(Id_Patient).filter(lambda x: len(x) > 1)
+    dup_con = dup_con.sort_values(by=[Id_Patient, total_cont_per_case]).groupby(Id_Patient).head(1)
+
+    if len(dup_con) > 0:
+        # Remove duplicated control data from one_to_one
+        one_to_one = pd.concat([one_to_one[~one_to_one[Id_Patient].isin(dup_con[Id_Patient])], dup_con]).sort_values(by=[cluster_var, case_control])
+        
+        # Compute 'mat_per_case' as all but first one in one_to_one
+        one_to_one['mat_per_case'] = one_to_one.groupby(cluster_var)[cluster_var].transform('count') - 1
+        
+        # Filter rows with mat_per_case equals to 1 and drop mat_per_case column
+        case_cntrl_1st_wave = one_to_one[one_to_one['mat_per_case'] == 1].drop(columns='mat_per_case')
+        
+        # Remove case_cntrl_1st_wave from the original dataset
+        dataset = dataset[~dataset[cluster_var].isin(case_cntrl_1st_wave[cluster_var])]
+        dataset = dataset[~dataset[Id_Patient].isin(case_cntrl_1st_wave[Id_Patient])]
+    else:
+        # Calculate 'mat_per_case'
+        one_to_one['mat_per_case'] = one_to_one.groupby(cluster_var)[cluster_var].transform('count') - 1
+        
+        # Filter rows with mat_per_case equals to 1 and drop mat_per_case column
+        case_cntrl_1st_wave = one_to_one[one_to_one['mat_per_case'] == 1].drop(columns='mat_per_case')
+        
+        # Set dataset to None
+        dataset = None
+
+    return {"case_cntrl_1st_wave": case_cntrl_1st_wave, "dataset": dataset, "dup_con": dup_con}
+
+# Example usage
+# dataset = pd.read_csv("your_file.csv")
+# result = iterations_per_round(dataset, 'cluster_var', 'Id_Patient', 'total_cont_per_case', 'case_control')
+# case_cntrl_1st_wave, updated_dataset, dup_con = result["case_cntrl_1st_wave"], result["dataset"], result["dup_con"]
+
+'''
+**Function Explanation:**
+
+1. **one_to_one:** Selects the first two rows within each group defined by `cluster_var`.
+2. **dup_con:** Identifies duplicated control data based on `Id_Patient`, sorting and filtering.
+3. **In the if block**: Manipulates `one_to_one` to ensure distinct patients, recalculates `mat_per_case`, filters rows where `mat_per_case` equals 1 and updates the original dataset.
+4. **In the else block**: Directly calculates `mat_per_case`, filters rows where it equals 1, and sets `dataset` to None.
+5. **Returns:** A dictionary with three components: `case_cntrl_1st_wave`, the updated `dataset`, and `dup_con`.
+
+Make sure to adjust this script and verify the column names and values according to your specific dataset.
+'''
+
+
+
+
+
+import pandas as pd
+
+def optimal_matching(total_database, n_con, cluster_var, Id_Patient, total_cont_per_case, case_control, with_replacement=False):
+    if n_con > total_database[total_cont_per_case].max():
+        raise ValueError(f"Number of controls (n_con) should be less than or equal to the total number of controls per case ({total_database[total_cont_per_case].max()}).")
+
+    if with_replacement:
+        final_data = total_database.groupby(cluster_var).head(n_con + 1)
+        return final_data
+    else:
+        def iterations_per_round(dataset):
+            one_to_one = dataset.groupby(cluster_var).head(2)
+            dup_con = one_to_one.drop_duplicates().groupby(Id_Patient).filter(lambda x: len(x) > 1)
+            dup_con = dup_con.sort_values(by=[Id_Patient, total_cont_per_case]).groupby(Id_Patient).head(1)
+            
+            if len(dup_con) > 0:
+                one_to_one = pd.concat([one_to_one[~one_to_one[Id_Patient].isin(dup_con[Id_Patient])], dup_con]).sort_values(by=[cluster_var, case_control])
+                one_to_one['mat_per_case'] = one_to_one.groupby(cluster_var)[cluster_var].transform('count') - 1
+                case_cntrl_1st_wave = one_to_one[one_to_one['mat_per_case'] == 1].drop(columns='mat_per_case')
+                dataset = dataset[~dataset[cluster_var].isin(case_cntrl_1st_wave[cluster_var])]
+                dataset = dataset[~dataset[Id_Patient].isin(case_cntrl_1st_wave[Id_Patient])]
+            else:
+                one_to_one['mat_per_case'] = one_to_one.groupby(cluster_var)[cluster_var].transform('count') - 1
+                case_cntrl_1st_wave = one_to_one[one_to_one['mat_per_case'] == 1].drop(columns='mat_per_case')
+                dataset = None
+                
+            return {"case_cntrl_1st_wave": case_cntrl_1st_wave, "dataset": dataset, "dup_con": dup_con}
+        
+        dup_con = 1
+        wave_data = []
+        counter = 0
+        tmp_database = total_database.copy()
+        waves_round = []
+
+        while dup_con > 0:
+            counter += 1
+            datasets = iterations_per_round(tmp_database)
+            wave_data.append(datasets["case_cntrl_1st_wave"])
+            tmp_database = datasets["dataset"]
+            dup_con = len(datasets["dup_con"])
+
+        waves_round.append(pd.concat(wave_data))
+
+        if n_con > 1:
+            waves_round_cont = []
+            for i_con in range(2, n_con + 1):
+                for i_wave in range(len(waves_round)):
+                    tmp_waves_round = waves_round[i_wave]
+                    waves_round_cont.append(tmp_waves_round[tmp_waves_round[case_control] == "control"])
+                waves_round_merge = pd.concat(waves_round_cont)
+                tmp_database = total_database.copy()
+                tmp_database = tmp_database[~tmp_database[Id_Patient].isin(waves_round_merge[Id_Patient])]
+                tmp_database[total_cont_per_case] = tmp_database.groupby(cluster_var)[total_cont_per_case].transform('count') - 1
+                dup_con = 1
+                wave_data = []
+                counter = 0
+
+                while dup_con > 0:
+                    counter += 1
+                    datasets = iterations_per_round(tmp_database)
+                    wave_data.append(datasets["case_cntrl_1st_wave"])
+                    tmp_database = datasets["dataset"]
+                    dup_con = len(datasets["dup_con"])
+
+                waves_round.append(pd.concat(wave_data))
+
+            final_data = waves_round[0]
+            for I_add_con in range(2, n_con + 1):
+                tmp_waves_round = waves_round[I_add_con - 1]
+                final_data = pd.concat([final_data, tmp_waves_round[tmp_waves_round[case_control] == "control"]])
+        else:
+            final_data = waves_round[0]
+
+        return final_data
+
+# Example usage:
+
+# Load your dataset
+# total_database = pd.read_csv("your_file.csv")
+
+# Example usage of the function:
+# final_data = optimal_matching(total_database, n_con=2, cluster_var='cluster_case', Id_Patient='Patient_Id', 
+#                               total_cont_per_case='total_control_per_case', case_control='case_control')
+
+"""
+Function Explanation:
+1. Input Checks and Initial Setup:
+	- Initial validation to ensure n_con does not exceed the maximum number of controls available per case.
+	- If with_replacement is True, it simply groups by cluster_var and selects the first n_con + 1 cases.
+	- Otherwise, it proceeds with the matching process without replacement.
+2. Iterations Per Round:
+	- This function performs data manipulation and filtering to match cases and controls iteratively.
+"""

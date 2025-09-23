@@ -1,0 +1,188 @@
+Certainly! Below is the Python code, updated to include reading from a CSV file and performing the specified operations. Make sure you have a `.csv` file with the appropriate columns: `participant_ID`, `case_control`, `age`, and `handedness`.
+
+```python
+import numpy as np
+import pandas as pd
+
+# Load CSV data
+data = pd.read_csv('data.csv')
+
+# Separate data into cases and controls
+cases = data[data['case_control'] == 'case']
+controls = data[data['case_control'] == 'control']
+
+ncase = len(cases)
+nctrl = len(controls)
+
+age_cases = cases['age'].values
+age_controls = controls['age'].values
+
+# Step 1: Create ncase x nctrl difference array
+diff_age = np.zeros((ncase, nctrl))
+for i in range(ncase):
+    for j in range(nctrl):
+        diff_age[i, j] = age_controls[j] - age_cases[i]
+
+# Create a copy of the array called "working"
+working = diff_age.copy()
+
+# Step 2: Create a 1 x ncase array "match" with all values set to np.nan
+match = np.full(ncase, np.nan)
+
+# Step 3: Perform matching
+for _ in range(ncase):
+    # Step 3.1: Find the index (i, j) for the smallest absolute difference in the working array
+    min_value = np.nanmin(np.abs(working))
+    min_indices = np.where(np.abs(working) == min_value)
+    minlength = len(min_indices[0])
+    
+    if minlength > 1:
+        print("Multiple minima found:")
+        for idx in range(minlength):
+            i, j = min_indices[0][idx], min_indices[1][idx]
+            print(f"i: {i}, j: {j}, abs(diff_age[i,j]): {np.abs(diff_age[i,j])}")
+
+    i, j = min_indices[0][0], min_indices[1][0]
+    
+    # Step 3.2: Set match[i] = j
+    match[i] = j
+
+    # Step 3.3: Set all entries in row i of working to np.nan
+    working[i, :] = np.nan
+
+# Print the resulting match array
+print("Match array:", match)
+
+# Step 4: Print requested rows with participant details
+for i in range(ncase):
+    j = int(match[i])
+    print(f"{cases['participant_ID'].iloc[i]}, {cases['handedness'].iloc[i]}, {round(age_cases[i], 1)} | {round(age_controls[j], 1)}, {controls['handedness'].iloc[j]}, {controls['participant_ID'].iloc[j]}")
+
+# Calculations for step 5
+residual_differences = age_controls[match.astype(int)] - age_cases
+residual_diff_avg = np.mean(residual_differences)
+residual_diff_max_abs = np.max(np.abs(residual_differences))
+different_handedness_count = np.sum(cases['handedness'].values != controls['handedness'].values[match.astype(int)])
+
+print("\nAverage Residual Difference:", residual_diff_avg)
+print("Maximum Absolute Residual Difference:", residual_diff_max_abs)
+print("Number with Different Handedness:", different_handedness_count)
+```
+
+Explanation:
+1. **CSV Reading**:
+    - The `pandas` library is used to read the CSV file containing the participant data, with columns such as `participant_ID`, `case_control`, `age`, and `handedness`.
+    - Cases and controls are separated based on the `case_control` column.
+
+2. **Difference Array Calculation**:
+    - The `diff_age` array is created, containing the age differences between each combination of cases and controls.
+
+3. **Matching**:
+    - The matching algorithm finds pairs with the smallest absolute age difference, updating the `match` array and setting those entries in the `working` array to `np.nan`.
+
+4. **Participant Details Printing**:
+    - For each case, the corresponding control match is printed, including `participant_ID`, `handedness`, and ages (rounded to one decimal point).
+
+5. **Residual Difference Calculations**:
+    - The average residual difference, the maximum absolute residual difference, and the number of pairs with different handedness are computed and printed.
+
+Make sure you replace `'data.csv'` with the actual filename of your CSV file. Additionally, ensure you have the necessary columns in your CSV file. If you need further customization or have additional queries, feel free to ask!
+
+
+
+# ========================================================
+
+
+
+Certainly! You can use the `sys` module to read the filename from the command line arguments. Below is the updated code to include this functionality:
+
+```python
+import sys
+import numpy as np
+import pandas as pd
+
+# Read CSV filename from command line arguments
+if len(sys.argv) < 2:
+    print("Please provide the CSV file name as a command line argument.")
+    sys.exit(1)
+
+file_name = sys.argv[1]
+
+# Load CSV data
+data = pd.read_csv(file_name)
+
+# Separate data into cases and controls
+cases = data[data['case_control'] == 'case']
+controls = data[data['case_control'] == 'control']
+
+ncase = len(cases)
+nctrl = len(controls)
+
+age_cases = cases['age'].values
+age_controls = controls['age'].values
+
+# Step 1: Create ncase x nctrl difference array
+diff_age = np.zeros((ncase, nctrl))
+for i in range(ncase):
+    for j in range(nctrl):
+        diff_age[i, j] = age_controls[j] - age_cases[i]
+
+# Create a copy of the array called "working"
+working = diff_age.copy()
+
+# Step 2: Create a 1 x ncase array "match" with all values set to np.nan
+match = np.full(ncase, np.nan)
+
+# Step 3: Perform matching
+for _ in range(ncase):
+    # Step 3.1: Find the index (i, j) for the smallest absolute difference in the working array
+    min_value = np.nanmin(np.abs(working))
+    min_indices = np.where(np.abs(working) == min_value)
+    minlength = len(min_indices[0])
+
+    if minlength > 1:
+        print("Multiple minima found:")
+        for idx in range(minlength):
+            i, j = min_indices[0][idx], min_indices[1][idx]
+            print(f"i: {i}, j: {j}, abs(diff_age[i,j]): {np.abs(diff_age[i,j])}")
+
+    i, j = min_indices[0][0], min_indices[1][0]
+
+    # Step 3.2: Set match[i] = j
+    match[i] = j
+
+    # Step 3.3: Set all entries in row i of working to np.nan
+    working[i, :] = np.nan
+
+# Print the resulting match array
+print("Match array:", match)
+
+# Step 4: Print requested rows with participant details
+for i in range(ncase):
+    j = int(match[i])
+    print(f"{cases['participant_ID'].iloc[i]}, {cases['handedness'].iloc[i]}, {round(age_cases[i], 1)} | {round(age_controls[j], 1)}, {controls['handedness'].iloc[j]}, {controls['participant_ID'].iloc[j]}")
+
+# Calculations for step 5
+residual_differences = age_controls[match.astype(int)] - age_cases
+residual_diff_avg = np.mean(residual_differences)
+residual_diff_max_abs = np.max(np.abs(residual_differences))
+different_handedness_count = np.sum(cases['handedness'].values != controls['handedness'].values[match.astype(int)])
+
+print("\nAverage Residual Difference:", residual_diff_avg)
+print("Maximum Absolute Residual Difference:", residual_diff_max_abs)
+print("Number with Different Handedness:", different_handedness_count)
+```
+
+Explanation:
+1. **Reading Command Line Argument**:
+    - The script now checks that a filename is provided as a command line argument. If not, it prompts the user and exits.
+    - The `sys.argv` list is used to get the filename from the command line argument.
+
+2. **Loading CSV Data**:
+    - The `file_name` variable is passed to `pd.read_csv()` to load the data.
+
+You can run this script from the command line like this:
+```sh
+python script_name.py data.csv
+```
+Replace `script_name.py` with the name of your Python script file and `data.csv` with the name of your data file. Let me know if you need further assistance!
