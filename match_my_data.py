@@ -1,3 +1,4 @@
+# %% SETUP
 # -*- coding: utf-8 -*-
 """
 Just trying to use the Ben Miroglio software pymatch to optimize 1:1 group 
@@ -10,6 +11,12 @@ Kevin J. Black, M.D., Sept. 5, 2025
 import pandas as pd
 import numpy as np
 import sys
+
+# Which group is cases
+case_group = 'PTD'
+control_group = 'TS'
+# case_group = 'TS'
+# control_group = 'none'
 
 # %% FIRST: just link the data from scan and scan_day to the list of kids,
 # limited to the 4th MRI-sequence group in Suppl. Table 1
@@ -62,6 +69,43 @@ except Exception as e:
     print(f"An error occurred while reading {enigma_filename}: {e}")
     sys.exit(1)
 # 1371 rows
+
+# %% THIS TIME GET "boys" AND "girls" SHEETS FROM cleaned_data_2025-11-10.xlsx
+
+boygirl_filenameroot = "C:/Users/kevin/Box/Black_Lab/projects/TS/New_Tics_R01/papers/2024_screening_FS_vs_ctls/"
+boygirlfile = (boygirl_filenameroot + "cleaned_data_2025-11-10.xlsx")
+boy_filename = nt_fs_filenameroot + "boys.csv"
+girl_filename = nt_fs_filenameroot + "girls.csv"
+
+try:
+    who1 = pd.read_excel(boygirlfile, sheet_name="all_data",
+                usecols = ['participant_ID','study_subject_ID','tic_dx','sex_at_birth','handedness',
+                    'age_at_scan','best_ygtss_impairment','best_ygtss_tts','duration_of_tics_(days)'])
+except Exception as e:
+    print(f"An error occurred while reading {boygirlfile}: {e}")
+    sys.exit(1)
+# Nrows should be 392
+
+who1.rename(columns={'tic_dx': 'dx_group'}, inplace=True)  
+# I checked & in "cleaned_data_....xlsx", the only diagnoses listed are 'PTD', 'none', and 'TS'.
+
+# Output the boys file and the girls file (because that's what the rows below expect). 
+
+who2 = who1.loc[(who1['dx_group']==case_group) | (who1['dx_group']==control_group)]
+
+
+try:
+    who2.loc[who2['sex_at_birth']=='M'].to_csv(boy_filename, index=False)
+except Exception as e:
+    print(f"An error occurred while writing {boy_filename}: {e}")
+    sys.exit(1)
+try:
+    who2.loc[who2['sex_at_birth']=='F'].to_csv(girl_filename, index=False)
+except Exception as e:
+    print(f"An error occurred while writing {girl_filename}: {e}")
+    sys.exit(1)
+
+
 
 # %% Read in the "boys" and "girls" sheets and concatenate them into "who"
 try:
@@ -153,8 +197,8 @@ closest_visit['age_diff'].max()
 """
 
 closest_visit['case_control'] = \
-    closest_visit['dx_group'].case_when([(closest_visit['dx_group'].eq('PTD'), 'case'),
-                                         (closest_visit['dx_group'].eq('none'), 'control'),
+    closest_visit['dx_group'].case_when([(closest_visit['dx_group'].eq(case_group), 'case'),
+                                         (closest_visit['dx_group'].eq(control_group), 'control'),
                                          (np.full(len(closest_visit), True), None),
                                         ],
                                        )
@@ -168,7 +212,7 @@ except Exception as e:
     print(f"An error occurred while writing {one_scan_per_subject_filename}: {e}")
     sys.exit(1)
 
-# %% select scan rows matching 2500/2.9/1070, 64-channel, 1x1x1
+# %% select rows in "scan" matching 2500/2.9/1070, 64-channel, 1x1x1
 scan_matching_params = scan[close_enough(scan['TR'], 2500, epsilon=5) &
                             close_enough(scan['TE'], 2.9, .03) &
                             close_enough(scan['TI'], 1070, 20) &
@@ -189,6 +233,16 @@ try:
 except Exception as e:
     print(f"An error occurred while writing {ready_to_match_filename}: {e}")
     sys.exit(1)
+
+
+
+# %% End of program  (temporarily)
+
+# TODO: save or print the matching: SSID, sex, age, case/control
+sys.exit(0)
+
+# ===================================================================== #
+
 
 # %% Create the variable “total controls per case”
 # https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-021-01256-3#citeas
