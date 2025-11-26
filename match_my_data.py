@@ -13,10 +13,10 @@ import numpy as np
 import sys
 
 # Which group is cases
-case_group = 'PTD'
-control_group = 'TS'
-# case_group = 'TS'
-# control_group = 'none'
+# case_group = 'PTD'
+# control_group = 'TS'
+case_group = 'TS'
+control_group = 'none'
 
 # %% FIRST: just link the data from scan and scan_day to the list of kids,
 # limited to the 4th MRI-sequence group in Suppl. Table 1
